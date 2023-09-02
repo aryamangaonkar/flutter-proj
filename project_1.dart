@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         '/SignUp': (context) => SignUpPage(),
         '/reset': (context) => Reset(),
+        '/mail': (context) => SendCode(),
         '/resetdone': (context) => ResetDone(),
       },
     );
@@ -27,25 +28,103 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome to Home Page',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              child: Text('Logout'),
-            ),
-            // SizedBox(height: 100),
-          ],
+      appBar: AppBar(
+        title: Text(
+          'Manage your time well',
+          textAlign: TextAlign.center,
         ),
+        centerTitle: true,
+        toolbarHeight: 120,
+        backgroundColor: Colors.orange,
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                icon: Icon(Icons.exit_to_app_rounded),
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/login');
+                },
+              ),
+            ],
+          ),
+        ],
       ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 100),
+          Text(
+            '   Categories',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 50),
+          Row(
+            mainAxisAlignment:
+                MainAxisAlignment.spaceAround, // Adjust the spacing
+            children: [
+              _buildCategoryIcon(
+                icon: Icons.work,
+                label: 'Work',
+              ),
+              _buildCategoryIcon(
+                icon: Icons.personal_video_rounded,
+                label: 'Personal',
+              ),
+              _buildCategoryIcon(
+                icon: Icons.shopping_bag,
+                label: 'Shopping',
+              ),
+              _buildCategoryIcon(
+                icon: Icons.health_and_safety,
+                label: 'Health',
+              ),
+            ],
+          ),
+          // Add other widgets here for the body content below the icons
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.orange,
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_rounded), label: "Calendar"),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: "Add"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "List"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: "Settings"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryIcon({
+    required IconData icon,
+    required String label,
+  }) {
+    return Column(
+      children: [
+        Icon(
+          icon,
+          size: 48.0,
+          color: Colors.orange,
+        ),
+        SizedBox(height: 8.0), // Add spacing between icon and label
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -104,7 +183,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 30),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/reset');
+                        Navigator.pushReplacementNamed(context, '/mail');
                       },
                       child: Text(
                         'Forgot Password',
@@ -118,7 +197,7 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
-                        // Implement "Sign In" functionality
+                        // helps implement the sign-in method
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -262,27 +341,6 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
-                    Text(
-                      "Already  an account?",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/login');
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
                   ],
                 ),
               ),
@@ -291,6 +349,67 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SendCode extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+            child: SingleChildScrollView(
+                child: Column(
+                    //creates a vertical line of flowchain
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, //sets the content to the centre
+                    children: [
+          Text(
+            "Forgot your Password ??",
+            style: TextStyle(
+              fontSize: 28,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 50),
+          Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter your email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ],
+              )),
+          SizedBox(height: 20),
+          Text(
+            "A code will been sent on your registered mail ",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+          SizedBox(height: 20),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/reset');
+            },
+            child: Text(
+              'Save',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.orange,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ]))));
   }
 }
 
@@ -305,29 +424,20 @@ class Reset extends StatelessWidget {
             mainAxisAlignment:
                 MainAxisAlignment.center, //sets the content to the centre
             children: [
-              SizedBox(height: 100),
-              Text(
-                'Forgot Your Password ??',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              SizedBox(height: 20),
+              SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                    Text(
+                      "Password Reset ",
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 50),
                     TextField(
                       obscureText: true,
                       decoration: InputDecoration(
@@ -393,8 +503,12 @@ class ResetDone extends StatelessWidget {
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(
         'Password Reset Done',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
+      SizedBox(height: 30),
       TextButton(
         onPressed: () {
           Navigator.pushReplacementNamed(context, '/login');
@@ -411,3 +525,4 @@ class ResetDone extends StatelessWidget {
     ])));
   }
 }
+
